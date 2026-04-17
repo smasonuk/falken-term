@@ -52,10 +52,10 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			return m, nil
 
 		case tea.KeyEnter:
-			if m.state == StatePrompt {
-				prompt := strings.TrimSpace(m.textarea.Value())
-				return m.processInput(prompt)
-			}
+			// if m.state == StatePrompt {
+			// 	prompt := strings.TrimSpace(m.textarea.Value())
+			// 	return m.processInput(prompt)
+			// }
 			if m.state == StateDone {
 				prompt := strings.TrimSpace(m.textinput.Value())
 				return m.processInput(prompt)
@@ -70,17 +70,18 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		m.height = msg.Height
 		m.textarea.SetWidth(m.width - 4)
 		m.textinput.Width = m.width - 2
+		m.resized = true
 	}
 
-	if m.state == StatePrompt {
-		m.textarea, taCmd = m.textarea.Update(msg)
-	} else {
-		if m.state == StateDone && !m.textinput.Focused() {
-			m.textinput.Focus()
-		}
-		m.viewport, vpCmd = m.viewport.Update(msg)
-		m.textinput, tiCmd = m.textinput.Update(msg)
+	// if m.state == StatePrompt {
+	// 	m.textarea, taCmd = m.textarea.Update(msg)
+	// } else {
+	if m.state == StateDone && !m.textinput.Focused() {
+		m.textinput.Focus()
 	}
+	m.viewport, vpCmd = m.viewport.Update(msg)
+	m.textinput, tiCmd = m.textinput.Update(msg)
+	// }
 
 	return m, tea.Batch(taCmd, vpCmd, tiCmd)
 }

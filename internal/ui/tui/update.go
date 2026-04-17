@@ -135,7 +135,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		m.workflow.Session.BootError = nil
 		m.workflow = m.workflow.Navigate(app.RouteChat)
-		m.chat, cmd = m.chat.SetPromptState()
+		m.chat, cmd = m.chat.SetDoneState()
 		return m, tea.Batch(m.chat.Init(), cmd)
 
 	case app.DiffGeneratedMsg:

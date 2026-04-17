@@ -33,7 +33,7 @@ func (m Model) slashCommands() []SlashCommandChat {
 			Names:       []string{"/new"},
 			Description: "Start a new session and clear persisted conversation state",
 			Handler: func(m Model, args string) (Model, tea.Cmd) {
-				m.state = StatePrompt
+				m.state = StateDone
 				if m.runtime != nil {
 					if m.runtime.CancelFunc != nil {
 						m.runtime.CancelFunc()
@@ -117,7 +117,7 @@ func (m Model) slashCommands() []SlashCommandChat {
 				}
 				m.viewport.SetContent(m.runtime.Logs)
 				m.viewport.GotoBottom()
-				if m.state == StatePrompt {
+				if m.state == StateDone {
 					m.state = StateDone
 					m.textinput.Focus()
 					m.textarea.Blur()
@@ -154,11 +154,11 @@ func (m Model) runSlashCommand(input string) (Model, tea.Cmd) {
 	}
 	m.viewport.SetContent(m.runtime.Logs)
 	m.viewport.GotoBottom()
-	if m.state == StatePrompt {
-		m.state = StateDone
-		m.textinput.Focus()
-		m.textarea.Blur()
-	}
+	// if m.state == StatePrompt {
+	// 	m.state = StateDone
+	// 	m.textinput.Focus()
+	// 	m.textarea.Blur()
+	// }
 	m.textinput.SetValue("")
 	m.textarea.SetValue("")
 	return m, nil

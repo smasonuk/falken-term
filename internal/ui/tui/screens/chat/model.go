@@ -15,8 +15,8 @@ import (
 type State int
 
 const (
-	StatePrompt State = iota
-	StateRunning
+	// StatePrompt State = iota
+	StateRunning State = iota
 	StateDone
 )
 
@@ -33,6 +33,8 @@ type Model struct {
 	spinner        spinner.Model
 	todosPath      string
 	width, height  int
+	resized        bool
+	lastChatLayout *chatLayout
 }
 
 func NewModel(session *falken.Session, todosPath string, runtime *app.AgentSessionState) Model {
@@ -61,7 +63,7 @@ func NewModel(session *falken.Session, todosPath string, runtime *app.AgentSessi
 	h.ShowAll = false
 
 	return Model{
-		state:          StatePrompt,
+		state:          StateDone,
 		session:        session,
 		textarea:       ta,
 		viewport:       vp,
@@ -79,14 +81,14 @@ func (m Model) Init() tea.Cmd {
 	return textarea.Blink
 }
 
-func (m Model) SetPromptState() (Model, tea.Cmd) {
-	m.state = StatePrompt
-	if m.runtime != nil {
-		m.runtime.IsActive = false
-		m.runtime.CancelFunc = nil
-	}
-	return m, m.textarea.Focus()
-}
+// func (m Model) SetPromptState() (Model, tea.Cmd) {
+// 	m.state = StatePrompt
+// 	if m.runtime != nil {
+// 		m.runtime.IsActive = false
+// 		m.runtime.CancelFunc = nil
+// 	}
+// 	return m, m.textarea.Focus()
+// }
 
 func (m Model) SetDoneState() (Model, tea.Cmd) {
 	m.state = StateDone

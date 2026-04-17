@@ -16,27 +16,7 @@ type chatLayout struct {
 }
 
 func (m Model) View() string {
-	if m.state == StatePrompt {
-		return m.renderPromptView()
-	}
 	return m.renderChatView()
-}
-
-func (m Model) renderPromptView() string {
-	m.help.Width = max(0, m.width-2)
-
-	return lipgloss.Place(
-		m.width, m.height,
-		lipgloss.Center, lipgloss.Center,
-		lipgloss.JoinVertical(
-			lipgloss.Left,
-			"What would you like me to do?",
-			"",
-			m.textarea.View(),
-			"",
-			m.help.View(m.keyMap.forPrompt()),
-		),
-	)
 }
 
 func (m Model) renderChatView() string {
@@ -55,6 +35,10 @@ func (m Model) renderChatView() string {
 }
 
 func (m Model) computeLayout() chatLayout {
+	if !m.resized && m.lastChatLayout != nil {
+		return *m.lastChatLayout
+	}
+
 	layout := chatLayout{
 		leftWidth:   m.width * 4 / 5,
 		rightWidth:  (m.width * 1 / 5) - 2,
@@ -77,6 +61,9 @@ func (m Model) computeLayout() chatLayout {
 	if layout.mainHeight < 0 {
 		layout.mainHeight = 0
 	}
+
+	m.resized = false
+	m.lastChatLayout = &layout
 
 	return layout
 }
@@ -161,11 +148,4 @@ func (m Model) logsContent() string {
 	}
 
 	return viewContent
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
