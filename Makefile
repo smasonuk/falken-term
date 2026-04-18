@@ -1,4 +1,4 @@
-APP_NAME := falken-term
+APP_NAME := falken
 CORE_DIR := ../falken-core
 
 .PHONY: all build core_assets clean run
