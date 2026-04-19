@@ -91,7 +91,7 @@ The chat screen supports these built-in commands:
 
 - `/help` shows available commands.
 - `/new` resets the current conversation state and clears persisted session context.
-- `/plan <request>` forces the next run into plan mode and seeds `.agent_plan.md`.
+- `/plan <request>` forces the next run into plan mode and initializes the runtime plan.
 - `/push` skips to diff review for the current sandbox state.
 - `/exit` or `/quit` closes the application.
 

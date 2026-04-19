@@ -3,7 +3,6 @@ package chat
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -69,9 +68,8 @@ func (m Model) slashCommands() []SlashCommandChat {
 			Handler: func(m Model, args string) (Model, tea.Cmd) {
 				if m.session != nil {
 					m.session.ForcePlanMode(true)
-					_ = os.WriteFile(filepath.Join(m.session.Paths().WorkspaceDir, ".agent_plan.md"), []byte("# Implementation Plan\n\n"), 0644)
 				}
-				prompt := fmt.Sprintf("System: The user has placed you directly into Plan Mode for this request. Read the codebase, write your plan to `.agent_plan.md`, and call the `exit_plan_mode` tool. You must do this before taking any action.\n\nUser Request: %s", args)
+				prompt := fmt.Sprintf("System: The user has placed you directly into Plan Mode for this request. Read the codebase, write your plan using the `write_plan` tool, and call the `exit_plan_mode` tool. You must do this before taking any action.\n\nUser Request: %s", args)
 				return m, func() tea.Msg {
 					return app.StartChatRunMsg{
 						Prompt:        prompt,
